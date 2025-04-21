@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taxi@ at Click </title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+    header { background: #1e88e5; color: white; padding: 20px; text-align: center; }
+    main { padding: 20px; max-width: 600px; margin: auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; }
+    .form-group input, .form-group select { width: 100%; padding: 8px; }
+    button { padding: 10px 20px; background: #1e88e5; color: white; border: none; cursor: pointer; }
+    .error { color: red; font-size: 0.9em; }
+    #confirmation { margin-top: 20px; display: none; background: #e0f7fa; padding: 10px; border-left: 5px solid #00796b; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Taxi@ at Click </h1>
+    <p>Fast. Simple. Reliable Taxi Top-Ups</p>
+  </header>
+  <main>
+    <h2>Top-Up Form</h2>
+    <form id="topUpForm">
+      <div class="form-group">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required />
+        <div class="error" id="nameError"></div>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" />
+        <div class="error" id="phoneError"></div>
+      </div>
+      <div class="form-group">
+        <label for="amount">Load Amount:</label>
+        <input type="number" id="amount" name="amount" required min="10" />
+        <div class="error" id="amountError"></div>
+      </div>
+      <button type="submit">Submit</button>
+    </form><div id="confirmation"></div>
+
+  </main>  <script>
+    document.getElementById("topUpForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      let isValid = true;
+
+      // Reset errors
+      document.getElementById("nameError").textContent = "";
+      document.getElementById("phoneError").textContent = "";
+      document.getElementById("amountError").textContent = "";
+
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (name === "") {
+        document.getElementById("nameError").textContent = "Name is required.";
+        isValid = false;
+      }
+      if (!/^\d{10}$/.test(phone)) {
+        document.getElementById("phoneError").textContent = "Enter a valid 10-digit number.";
+        isValid = false;
+      }
+      if (isNaN(amount) || amount < 10) {
+        document.getElementById("amountError").textContent = "Amount must be at least 10.";
+        isValid = false;
+      }
+
+      if (isValid) {
+        document.getElementById("confirmation").style.display = "block";
+        document.getElementById("confirmation").innerHTML =
+          `<strong>Thank you, ${name}!</strong><br>Your phone number ${phone} will be loaded with R${amount.toFixed(2)}.`;
+        document.getElementById("topUpForm").reset();
+      }
+    });
+  </script></body>
+</html>
